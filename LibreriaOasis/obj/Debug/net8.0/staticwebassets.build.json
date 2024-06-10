@@ -1,0 +1,19 @@
+{
+  "Version": 1,
+  "Hash": "2bdh4A7v01VF+gXjBGmHSGYHq5Xd8/tOAR5w4r1JVIo=",
+  "Source": "LibreriaOasis",
+  "BasePath": "_content/LibreriaOasis",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "LibreriaOasis\\wwwroot",
+      "Source": "LibreriaOasis",
+      "ContentRoot": "C:\\Users\\netox\\PROGRAMACION\\.NET\\OASIS\\LibreriaOasis\\LibreriaOasis\\wwwroot\\",
+      "BasePath": "_content/LibreriaOasis",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": []
+}

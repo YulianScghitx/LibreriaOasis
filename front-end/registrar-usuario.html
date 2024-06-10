@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Libreria</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+        <style>
+          html, body {
+              height: 100%;
+              margin: 0;
+          }
+          .wrapper {
+              display: flex;
+              flex-direction: column;
+              min-height: 100vh;
+          }
+          .main-content {
+              flex: 1;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              flex-direction: column;
+          }
+          footer {
+              background-color: #343a40;
+              color: white;
+              text-align: center;
+              padding: 1rem 0;
+              margin-top: auto;
+          }
+          .RegistrarUsuario-container {
+                width: 100%;
+                max-width: 400px;
+                padding: 20px;
+                background: #f8f9fa;
+                border-radius: 8px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+      </style>
+    </head>
+<body>
+    <div class="wrapper">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="index.html">Inicio</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                  <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                      <a class="nav-link active" aria-current="page" href="inicio-sesion.html">Inicio sesión</a>
+                    </li>
+                    <li class="nav-item ">
+                      <a class="nav-link active" href="listar-usuario.html">Listar Usuario</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                      <a class="nav-link active dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Dropdown
+                      </a>
+                      <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="#">Action</a></li>
+                        <li><a class="dropdown-item" href="#">Another action</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                      </ul>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                    </li>
+                  </ul>
+                  <div class="d-flex">
+                    <button type="button" class="btn btn-outline-danger">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart-check" viewBox="0 0 16 16">
+                        <path d="M11.354 6.354a.5.5 0 0 0-.708-.708L8 8.293 6.854 7.146a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0z"></path>
+                        <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1zm3.915 10L3.102 4h10.796l-1.313 7zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0m7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0"></path>
+                        </svg>
+                      </button>
+                  </div>
+                </div>
+            </div>
+        </nav>
+        <div class="main-content">
+            <h2>Registrar Usuario</h2>
+            <br>
+            <div class="RegistrarUsuario-container">
+                <form id="FormularioRegistrarUsuario">
+                    <div class="form-group">
+                        <label for="correo">Correo</label>
+                        <input type="email" class="form-control" name="correo" id="correo" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="rut">R.U.T</label>
+                        <input type="text" class="form-control" name="rut" id="rut" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="primer_nombre">Primer Nombre</label>
+                        <input type="text" class="form-control" name="primer_nombre" id="primer_nombre" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="segundo_nombre">Segundo Nombre</label>
+                        <input type="text" class="form-control" name="segundo_nombre" id="segundo_nombre">
+                    </div>
+                    <div class="form-group">
+                        <label for="apellido_paterno">Apellido Paterno</label>
+                        <input type="text" class="form-control" name="apellido_paterno" id="apellido_paterno" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="apellido_materno">Apellido Materno</label>
+                        <input type="text" class="form-control" name="apellido_materno" id="apellido_materno" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="contrasena">Contraseña:</label> 
+                        <input type="password" class="form-control" name="contrasena" id="contrasena" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="numero_telefono">Número de teléfono</label>
+                        <input type="tel" class="form-control" name="numero_telefono" id="numero_telefono" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="comuna">Comuna</label>
+                        <select class="form-control"  name="comuna" id="comuna" required>
+                            <option value="">Seleccione una comuna</option>
+                            <option value="1">Maipu</option>
+                        </select>
+                    </div>
+                    <br>
+                    <button type="button" class="btn btn-primary btn-block" onclick="consumirWebAPIFORM(event)">Guardar</button>
+                </form>
+            </div>
+            <br>
+        </div>
+        <footer class="bg-dark text-white text-center p-3 mt-auto"></footer>
+    </div>
+    <script type="text/javascript" src="js/funciones.js"></script>
+    <script type="text/javascript">
+        var urlWebAPIUsuarios = 'https://localhost:7025/usuarios';
+
+        async function consumirWebAPIFORM() {
+            event.preventDefault();
+            let Datos = {
+                rut              : document.querySelector('input[name="rut"]').value,
+                primer_nombre    : document.querySelector('input[name="primer_nombre"]').value,
+                segundo_nombre   : document.querySelector('input[name="segundo_nombre"]').value,
+                apellido_paterno : document.querySelector('input[name="apellido_paterno"]').value,
+                apellido_materno : document.querySelector('input[name="apellido_materno"]').value,
+                contrasena       : document.querySelector('input[name="contrasena"]').value,
+                correo           : document.querySelector('input[name="correo"]').value,
+                numero_telefono  : document.querySelector('input[name="numero_telefono"]').value,
+                comuna           : document.querySelector('select[name="comuna"]').value
+            };
+            let respuestaPost = await fetchPostData(urlWebAPIUsuarios,Datos);
+            if (respuestaPost.ok) {
+                alert('Usuario registrado exitosamente');
+                window.location.href = "inicio-sesion.html";
+            } else {
+                let errorMessage = await respuestaPost.text();
+                alert('Error al registrar el usuario: ' + errorMessage);
+            }
+        }
+        document.addEventListener('DOMContentLoaded', insertarFooter);
+    </script>
+</body>
+</html>
