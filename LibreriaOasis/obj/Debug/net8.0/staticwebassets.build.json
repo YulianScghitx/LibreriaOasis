@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "2bdh4A7v01VF+gXjBGmHSGYHq5Xd8/tOAR5w4r1JVIo=",
+  "Hash": "fots56GzuhhEADTnVTDlKQpfn7lBesKbMhioPTU+egc=",
   "Source": "LibreriaOasis",
   "BasePath": "_content/LibreriaOasis",
   "Mode": "Default",
@@ -10,10 +10,30 @@
     {
       "Name": "LibreriaOasis\\wwwroot",
       "Source": "LibreriaOasis",
-      "ContentRoot": "C:\\Users\\netox\\PROGRAMACION\\.NET\\OASIS\\LibreriaOasis\\LibreriaOasis\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\ediso\\OneDrive\\Documents\\GitHub\\LibreriaOasis\\LibreriaOasis\\wwwroot\\",
       "BasePath": "_content/LibreriaOasis",
       "Pattern": "**"
     }
   ],
-  "Assets": []
+  "Assets": [
+    {
+      "Identity": "C:\\Users\\ediso\\OneDrive\\Documents\\GitHub\\LibreriaOasis\\LibreriaOasis\\wwwroot\\.dummy",
+      "SourceId": "LibreriaOasis",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\ediso\\OneDrive\\Documents\\GitHub\\LibreriaOasis\\LibreriaOasis\\wwwroot\\",
+      "BasePath": "_content/LibreriaOasis",
+      "RelativePath": ".dummy",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\.dummy"
+    }
+  ]
 }
