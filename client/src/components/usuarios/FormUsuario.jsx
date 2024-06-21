@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { CreateUser } from '../../api/usuarios.api';
-import { useForm, SubmitHandler } from 'react-hook-form';
-
+import {} from 'react-hook-form';
+/*
 const RegistrarUsuario = () => {
   const [formData, setFormData] = useState({
     correo: '',
@@ -14,13 +14,13 @@ const RegistrarUsuario = () => {
     numero_telefono: '',
     comuna: ''
   });
-
+*/
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const consumirWebAPIFORM = async (e) => {
+  export const RegistrarUsuario = async (e) => {
     e.preventDefault();
     let respuestaPost  = await CreateUser(JSON.stringify(formData));
     if (respuestaPost.ok) {
@@ -30,7 +30,7 @@ const RegistrarUsuario = () => {
       let errorMessage = await respuestaPost.text();
       alert('Error al registrar el usuario: ' + errorMessage);
     }
-  };
+
 
 
   return (
@@ -38,7 +38,7 @@ const RegistrarUsuario = () => {
       <h2>Registrar Usuario</h2>
       <br />
       <div className="RegistrarUsuario-container">
-        <form id="FormularioRegistrarUsuario" onSubmit={consumirWebAPIFORM}>
+        <form id="FormularioRegistrarUsuario" onSubmit={RegistrarUsuario}>
           <div className="form-group">
             <label htmlFor="correo">Correo</label>
             <input type="email" className="form-control" name="correo" id="correo" required onChange={handleChange} value={formData.correo} />

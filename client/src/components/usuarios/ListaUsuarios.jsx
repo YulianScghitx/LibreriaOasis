@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { getAllUsuarios } from '../../api/usuarios.api';
-import User from '../../types/types' 
 
 
 const UserList = ({ urlWebAPIUsuarios }) => {
@@ -8,7 +7,7 @@ const UserList = ({ urlWebAPIUsuarios }) => {
 
     useEffect(() => {
         ( async () =>{
-            let data = getAllUsuarios();
+            let data =  await getAllUsuarios();
             setUsers(data);
         })();
        
@@ -31,7 +30,7 @@ const UserList = ({ urlWebAPIUsuarios }) => {
                 </tr>
             </thead>
             <tbody id="listaUsuarios">
-                {users.map((user, index) => (
+                {users.length > 0 && users.map((user, index) => (
                     <tr key={index}>
                         <td>{user.rut}</td>
                         <td>{user.correo}</td>

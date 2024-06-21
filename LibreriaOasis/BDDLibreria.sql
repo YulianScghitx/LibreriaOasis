@@ -71,6 +71,7 @@ INSERT INTO Sucursales (nombre, comuna) VALUES ('Sucursal Central',1);
 INSERT INTO TipoUsuarios (nombre) VALUES ('ADMIN');
 INSERT INTO TipoUsuarios (nombre) VALUES ('CLIENTE');
 ---EJEMPLO DE JSON USUARIOS
+/*
 {
     "rut"              : "19.960.758-8",
     "primer_nombre"    : "Julian",
@@ -82,3 +83,4 @@ INSERT INTO TipoUsuarios (nombre) VALUES ('CLIENTE');
     "numero_telefono"  : "+56972605993",
     "comuna"           : 1
 }
+*/
