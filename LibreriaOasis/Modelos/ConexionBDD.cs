@@ -7,5 +7,6 @@ namespace LibreriaOasis.Modelos
         {
         }
         public DbSet<Usuarios> Usuarios { get; set; }
+        public DbSet<Comunas> Comunas { get; set; }
     }
 }

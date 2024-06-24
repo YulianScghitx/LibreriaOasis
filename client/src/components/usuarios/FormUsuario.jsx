@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { CreateUser } from '../../api/usuarios.api';
-import {} from 'react-hook-form';
-/*
-const RegistrarUsuario = () => {
+import { getComunas } from '../../api/comunas.api';
+import { useForm  } from 'react-hook-form';
+
+export const FormUsuario = () => {
   const [formData, setFormData] = useState({
     correo: '',
     rut: '',
@@ -14,13 +15,23 @@ const RegistrarUsuario = () => {
     numero_telefono: '',
     comuna: ''
   });
-*/
+  const [comunas, setComunas] = useState([]);
+
+  useEffect(()=>{
+    ComunasList();
+  },[]);
+  async function ComunasList() {
+    const data = await getComunas();
+    setComunas(data);
+  }
+
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  export const RegistrarUsuario = async (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     let respuestaPost  = await CreateUser(JSON.stringify(formData));
     if (respuestaPost.ok) {
@@ -30,6 +41,7 @@ const RegistrarUsuario = () => {
       let errorMessage = await respuestaPost.text();
       alert('Error al registrar el usuario: ' + errorMessage);
     }
+  };
 
 
 
@@ -38,7 +50,7 @@ const RegistrarUsuario = () => {
       <h2>Registrar Usuario</h2>
       <br />
       <div className="RegistrarUsuario-container">
-        <form id="FormularioRegistrarUsuario" onSubmit={RegistrarUsuario}>
+        <form id="FormularioRegistrarUsuario" onSubmit={onSubmit}>
           <div className="form-group">
             <label htmlFor="correo">Correo</label>
             <input type="email" className="form-control" name="correo" id="correo" required onChange={handleChange} value={formData.correo} />
@@ -75,7 +87,14 @@ const RegistrarUsuario = () => {
             <label htmlFor="comuna">Comuna</label>
             <select className="form-control" name="comuna" id="comuna" required onChange={handleChange} value={formData.comuna}>
               <option value="">Seleccione una comuna</option>
-              <option value="1">Maipu</option>
+              {comunas.map( (comu) => {
+                return(
+                <option value={comu.id} key={comu.id}>
+                  {comu.nombre}
+                </option>
+              );
+              })}
+
             </select>
           </div>
           <br />
@@ -84,5 +103,4 @@ const RegistrarUsuario = () => {
       </div>
       <br />
     </div>
-  );
-};
+  )};

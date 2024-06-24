@@ -18,10 +18,10 @@ const TiendaNavbar = () =>{
                 <Nav>
                     <Nav.Link className="nav-link active" aria-current="page" to="/inicio-sesion" >Inicio sesión</Nav.Link>
                     <Link className="nav-link active" as={Link} to="/usuarios" >Listar Usuario</Link>
-                    <NavDropdown title="dropdown" id="basic-navbar-nav">
-                        <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-                        <NavDropdown.Item href="#action/3.2">
-                            Another action
+                    <NavDropdown title="Usuarios" id="basic-navbar-nav">
+                        <NavDropdown.Item as={Link} to={'/usuarios'}>Listar Usuario</NavDropdown.Item>
+                        <NavDropdown.Item as={Link} to={'/usuarios/registrar'}>
+                            Registrar Usuario
                         </NavDropdown.Item>
                         <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
                         <NavDropdown.Divider />

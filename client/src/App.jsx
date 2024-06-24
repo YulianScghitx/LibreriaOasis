@@ -1,11 +1,10 @@
 import { useState } from 'react';
-import viteLogo from '/vite.svg';
 import './App.css';
 import TiendaNavbar from './components/TiendaNavbar';
 import Footer from './components/Footer';
 import { BrowserRouter, Routes, Route, Outlet} from 'react-router-dom';
 import Usuarios from './pages/Usuarios';
-import { RegistrarUsuario } from "./components/usuarios/FormUsuario";
+import { FormUsuario } from "./components/usuarios/FormUsuario";
 
 function App() {
   const [count, setCount] = useState(0)
@@ -19,10 +18,11 @@ function App() {
           <Route  path="/"  element={<Layout></Layout>}>
             <Route index element={<Home></Home>}/>              
             <Route path="usuarios" element={<Usuarios/>}>
-              <Route path="registrar" element={<RegistrarUsuario/>}/>
+              
             </Route>
+            <Route path="usuarios/registrar" element={<FormUsuario/>}/>
           </Route>
-          
+
         </Routes>
         <Footer></Footer> 
 

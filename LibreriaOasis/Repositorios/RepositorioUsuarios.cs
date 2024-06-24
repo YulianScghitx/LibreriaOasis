@@ -1,6 +1,7 @@
 ﻿using LibreriaOasis.Modelos;
 using LibreriaOasis.Repositorios.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace LibreriaOasis.Repositorios
 {

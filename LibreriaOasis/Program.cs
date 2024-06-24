@@ -16,8 +16,10 @@ builder.Services.AddCors(opciones =>
     });
 });
 builder.Services.AddScoped<IRepositorioUsuarios, RepositorioUsuarios>();
+builder.Services.AddScoped<IRepositorioComunas, RepositorioComunas>();
 builder.Services.AddAutoMapper(typeof(Program));
 var app = builder.Build();
 app.UseCors();
 app.MapGroup("/usuarios").MapUsuarios();
+app.MapGroup("/comunas").MapComunas();
 app.Run();
