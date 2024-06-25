@@ -19,14 +19,12 @@ export const getAllUsuarios = async () => {
 
 
 export const CreateUser = async (user) => {
-    let data;
-    await axios.post(urlWebAPIUsuarios, user).then(
-        res => data = res.data
-    ).catch(
-        error =>{
-            data = undefined;
-            console.log(error);
-        }
-    );
-    return data;
+    try {
+        const response = await axios.post(urlWebAPIUsuarios, user, {headers:{'Content-Type': 'application/json'}})
+        return response;
+    } catch (error) {
+        console.log(error)
+        throw error;
+    }
+
 };
