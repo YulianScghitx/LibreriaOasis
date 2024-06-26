@@ -10,6 +10,8 @@ namespace LibreriaOasis.Modelos
             CreateMap<Usuarios, UsuariosSalidaDTO>();
             CreateMap<CategoriasEntradaDTO, Categorias>();
             CreateMap<Categorias, CategoriasSalidaDTO>();
+            CreateMap<LibrosEntradaDTO, Libros>();
+            CreateMap<Libros, LibrosSalidaDTO>();
         }
     }
 }
