@@ -36,14 +36,12 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Rut</th>
-                        <th>Correo</th>
-                        <th>Nombres</th>
-                        <th>Apellidos</th>
+                        <th>ID</th>
+                        <th>Nombre</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
-                <tbody id="listaUsuarios">
+                <tbody id="listaCategorias">
                 </tbody>
             </table>
         </div>
@@ -52,42 +50,44 @@
     <script type="text/javascript" src="js/funciones.js"></script>
     <script type="text/javascript">
 
-        var urlWebAPIUsuarios = 'https://localhost:7025/usuarios';
+        var urlWebAPICategorias = 'https://localhost:7025/categorias';
 
         async function consumirWebAPI() {
-            let respuestaGETUsuarios = await fetchGetData(urlWebAPIUsuarios);
-            let jsonGET = await respuestaGETUsuarios.json();
-            let listaUsuarios = document.getElementById('listaUsuarios');
-            let contador = 1;
-            jsonGET.forEach(usuarios => {
+            let respuestaGETCategorias = await fetchGetData(urlWebAPICategorias);
+            let jsonGET = await respuestaGETCategorias.json();
+            let listaCategorias = document.getElementById('listaCategorias');
+            jsonGET.forEach(categorias => {
                 let fila = document.createElement('tr');
                 fila.innerHTML = `
-                    <td>${usuarios.rut}</td>
-                    <td>${usuarios.correo}</td>
-                    <td>${usuarios.primer_nombre} ${usuarios.segundo_nombre}</td>
-                    <td>${usuarios.apellido_paterno} ${usuarios.apellido_materno}</td>
+                    <td>${categorias.id}</td>
+                    <td>${categorias.nombre}</td>
                     <td>
-                        <button class="btn btn-danger btn-sm" onclick="desactivarUsuarios('${usuarios.rut}')">Desactivar</button>
+                        <button class="btn btn-danger btn-sm" onclick="eliminarCategorias('${categorias.id}')">Eliminar</button>
+                        <button class="btn btn-primary btn-sm me-2" onclick="editarCategorias(${categorias.id})">Editar</button>
                     </td>
                 `;
-                listaUsuarios.appendChild(fila);
-                contador++;
+                listaCategorias.appendChild(fila);
             });
         }
 
-        async function desactivarUsuarios(rut) {
-            let confirmacion = confirm("¿Estás seguro de que quieres desactivar este usuario?");
+        async function eliminarCategorias(id) {
+            let confirmacion = confirm("¿Estás seguro de que quieres eliminar esta categoria?");
             if (confirmacion) {
-                let urlWebAPIUsuariosRut = `${urlWebAPIUsuarios}/${rut}`;
-                let respuestaDELETEUsuarios = await fetchDeleteData(urlWebAPIUsuariosRut);
-                if (respuestaDELETEUsuarios.ok) {
-                    alert('Usuario desactivado exitosamente');
+                let urlWebAPICategoriasId = `${urlWebAPICategorias}/${id}`;
+                let respuestaDELETECategorias = await fetchDeleteData(urlWebAPICategoriasId);
+                if (respuestaDELETECategorias.ok) {
+                    alert('Categoria eliminada exitosamente');
                     location.reload();
                 } else {
-                    alert('Error al desactivar el usuario');
+                    alert('Error al eliminar la categoria');
                 }
             }
         }
+
+        function editarCategorias(id) {
+            window.location.href = `crear-categoria.html?id=${id}`;
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             consumirWebAPI();
             insertarFooter();

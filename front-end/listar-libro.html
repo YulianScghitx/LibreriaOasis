@@ -36,14 +36,13 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Rut</th>
-                        <th>Correo</th>
-                        <th>Nombres</th>
-                        <th>Apellidos</th>
+                        <th>Nombre del Libro</th>
+                        <th>Precio</th>
+                        <th>Stock</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
-                <tbody id="listaUsuarios">
+                <tbody id="listaLibros">
                 </tbody>
             </table>
         </div>
@@ -52,42 +51,45 @@
     <script type="text/javascript" src="js/funciones.js"></script>
     <script type="text/javascript">
 
-        var urlWebAPIUsuarios = 'https://localhost:7025/usuarios';
+        var urlWebAPILibros = 'https://localhost:7025/libros';
 
         async function consumirWebAPI() {
-            let respuestaGETUsuarios = await fetchGetData(urlWebAPIUsuarios);
-            let jsonGET = await respuestaGETUsuarios.json();
-            let listaUsuarios = document.getElementById('listaUsuarios');
-            let contador = 1;
-            jsonGET.forEach(usuarios => {
+            let respuestaGETLibros = await fetchGetData(urlWebAPILibros);
+            let jsonGET = await respuestaGETLibros.json();
+            let listaLibros = document.getElementById('listaLibros');
+            jsonGET.forEach(libros => {
                 let fila = document.createElement('tr');
                 fila.innerHTML = `
-                    <td>${usuarios.rut}</td>
-                    <td>${usuarios.correo}</td>
-                    <td>${usuarios.primer_nombre} ${usuarios.segundo_nombre}</td>
-                    <td>${usuarios.apellido_paterno} ${usuarios.apellido_materno}</td>
+                    <td>${libros.nombre}</td>
+                    <td>$ ${libros.precio}</td>
+                    <td>${libros.stock}</td>
                     <td>
-                        <button class="btn btn-danger btn-sm" onclick="desactivarUsuarios('${usuarios.rut}')">Desactivar</button>
+                        <button class="btn btn-danger btn-sm" onclick="eliminarLibros('${libros.id}')">Eliminar</button>
+                        <button class="btn btn-primary btn-sm me-2" onclick="editarLibros(${libros.id})">Editar</button>
                     </td>
                 `;
-                listaUsuarios.appendChild(fila);
-                contador++;
+                listaLibros.appendChild(fila);
             });
         }
 
-        async function desactivarUsuarios(rut) {
-            let confirmacion = confirm("¿Estás seguro de que quieres desactivar este usuario?");
+        async function eliminarLibros(id) {
+            let confirmacion = confirm("¿Estás seguro de que quieres eliminar este libro?");
             if (confirmacion) {
-                let urlWebAPIUsuariosRut = `${urlWebAPIUsuarios}/${rut}`;
-                let respuestaDELETEUsuarios = await fetchDeleteData(urlWebAPIUsuariosRut);
-                if (respuestaDELETEUsuarios.ok) {
-                    alert('Usuario desactivado exitosamente');
+                let urlWebAPILibrosId = `${urlWebAPILibros}/${id}`;
+                let respuestaDELETELibros = await fetchDeleteData(urlWebAPILibrosId);
+                if (respuestaDELETELibros.ok) {
+                    alert('Libro eliminado exitosamente');
                     location.reload();
                 } else {
-                    alert('Error al desactivar el usuario');
+                    alert('Error al eliminar el libro');
                 }
             }
         }
+
+        function editarLibros(id) {
+            window.location.href = `crear-libro.html?id=${id}`;
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             consumirWebAPI();
             insertarFooter();
