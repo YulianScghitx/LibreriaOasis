@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Libreria</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+        <style>
+            html, body {
+                height: 100%;
+                margin: 0;
+            }
+            .wrapper {
+                display: flex;
+                flex-direction: column;
+                min-height: 100vh;
+            }
+            .main-content {
+                flex: 1;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+            }
+            footer {
+                background-color: #343a40;
+                color: white;
+                text-align: center;
+                padding: 1rem 0;
+                margin-top: auto;
+            }
+            .categoria-container {
+                width: 100%;
+                max-width: 400px;
+                padding: 20px;
+                background: #f8f9fa;
+                border-radius: 8px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+        </style>
+    </head>
+<body>
+    <div class="wrapper">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark"></nav>
+        <div class="main-content">
+            <h3>Crear Categoria</h3>
+            <br>
+            <div class="categoria-container">
+                <form id="categoriaForm">
+                    <div class="form-group">
+                        <label for="categoria">Nombre de la categoria:</label> 
+                        <input type="text" class="form-control" name="categoria" id="categoria" required>
+                    </div>
+                    <br>
+                    <button type="button" class="btn btn-primary btn-block" onclick="consumirWebAPIFORM(event)">Guardar</button>
+                </form>
+            </div>
+        </div>
+        <footer class="bg-dark text-white text-center p-3 mt-auto"></footer>
+    </div>
+    <script type="text/javascript" src="js/funciones.js"></script>
+    <script type="text/javascript">
+      var urlWebAPICategorias = 'https://localhost:7025/categorias';
+      var urlParams = new URLSearchParams(window.location.search);
+      var idCategoriasEditar = urlParams.get('id');
+
+      if (idCategoriasEditar !== null) {
+        consumirWebAPIGET();
+      }
+
+      async function consumirWebAPIGET() {
+        let urlWebAPICategoriasID = urlWebAPICategorias + `/${idCategoriasEditar}`;
+        let respuestaGET = await fetchGetData(urlWebAPICategoriasID);
+        let jsonGET = await respuestaGET.json();
+        if (respuestaGET.ok) {
+          document.querySelector('input[name="categoria"]').value = jsonGET.nombre;
+        }
+      } 
+
+      async function consumirWebAPIFORM() {
+        event.preventDefault();
+        let Datos = {
+            nombre  : document.querySelector('input[name="categoria"]').value
+        };
+        if (idCategoriasEditar !== null) {
+          let urlWebAPICategoriasID = urlWebAPICategorias + `/${idCategoriasEditar}`;
+          let respuestaPut = await fetchPutData(urlWebAPICategoriasID,Datos);
+          if (respuestaPut.ok) {
+              alert('Categoria modificada exitosamente');
+              window.location.href = "listar-categoria.html";
+          } else {
+              let errorMessage = await respuestaPut.text();
+              alert('Error al modificar la categoria: ' + errorMessage);
+          }
+        }else{
+          let respuestaPost = await fetchPostData(urlWebAPICategorias,Datos);
+          if (respuestaPost.ok) {
+              alert('Categoria registrada exitosamente');
+              window.location.href = "listar-categoria.html";
+          } else {
+              let errorMessage = await respuestaPost.text();
+              alert('Error al registrar la categoria: ' + errorMessage);
+          }
+        }
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+            insertarFooter();
+            insertarNavBar();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Libreria</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+        <style>
+            html, body {
+                height: 100%;
+                margin: 0;
+            }
+            .wrapper {
+                display: flex;
+                flex-direction: column;
+                min-height: 100vh;
+            }
+            .main-content {
+                flex: 1;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+            }
+            footer {
+                background-color: #343a40;
+                color: white;
+                text-align: center;
+                padding: 1rem 0;
+                margin-top: auto;
+            }
+            .libro-container {
+                width: 100%;
+                max-width: 400px;
+                padding: 20px;
+                background: #f8f9fa;
+                border-radius: 8px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+        </style>
+    </head>
+<body>
+    <div class="wrapper">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark"></nav>
+        <div class="main-content">
+            <h3>Crear Libro</h3>
+            <br>
+            <div class="libro-container">
+                <form id="libroForm">
+                    <div class="form-group">
+                        <label for="nombre">Nombre del libro:</label> 
+                        <input type="text" class="form-control" name="nombre" id="nombre" required>
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <label for="categoria">Categoria:</label> 
+                        <select class="form-control" name="categoria" id="categoria">
+                            <option value="">Seleccionar</option>
+                        </select>
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <label for="sucursal">Sucursal:</label> 
+                        <select class="form-control" name="sucursal" id="sucursal">
+                            <option value="">Seleccionar</option>
+                            <option value="1">Sucursal Central</option>
+                        </select>
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <label for="stock">Stock:</label> 
+                        <input type="text" class="form-control" name="stock" id="stock" required>
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <label for="precio">Precio:</label> 
+                        <input type="text" class="form-control" name="precio" id="precio" required>
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <label for="fecha" class="form-label">Fecha</label>
+                        <input type="date" class="form-control" name="fecha" >
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <label for="imagen" class="form-label">Selecciona la imagen del producto</label>
+                        <input class="form-control form-control-sm" type="file" id="imagen" name="imagen" accept="image/*">
+                    </div>
+                    <br>
+                    <button type="button" class="btn btn-primary btn-block" onclick="consumirWebAPIFORM(event)">Guardar</button>
+                </form>
+            </div>
+        </div>
+        <footer class="bg-dark text-white text-center p-3 mt-auto"></footer>
+    </div>
+    <script type="text/javascript" src="js/funciones.js"></script>
+    <script type="text/javascript">
+        var urlWebAPICategorias = 'https://localhost:7025/categorias';
+        var urlWebAPILibros     = 'https://localhost:7025/libros';
+        var urlParams = new URLSearchParams(window.location.search);
+        var idLibroEditar = urlParams.get('id');
+
+        if (idLibroEditar !== null) {
+            consumirWebAPIGETLibro();
+        }
+
+        async function consumirWebAPIGETLibro() {
+            let urlWebAPILibrosID = urlWebAPILibros + `/${idLibroEditar}`;
+            let respuestaGET = await fetchGetData(urlWebAPILibrosID);
+            let jsonGET = await respuestaGET.json();
+            if (respuestaGET.ok) {
+                let fechaSinHora = jsonGET.fecha.split('T');
+                document.querySelector('select[name="categoria"]').value = jsonGET.categoria;
+                document.querySelector('select[name="sucursal"]').value = jsonGET.sucursal;
+                document.querySelector('input[name="stock"]').value = jsonGET.stock;
+                document.querySelector('input[name="nombre"]').value = jsonGET.nombre;
+                document.querySelector('input[name="precio"]').value = jsonGET.precio;
+                document.querySelector('input[name="fecha"]').value = fechaSinHora[0];
+            }
+        } 
+
+        async function consumirWebAPIFORM(event) {
+            event.preventDefault();
+            let Datos = new FormData(document.getElementById('libroForm'));
+            Datos.append('categoria', document.querySelector('select[name="categoria"]').value);
+            Datos.append('sucursal', document.querySelector('select[name="sucursal"]').value);
+            Datos.append('stock', document.querySelector('input[name="stock"]').value);
+            Datos.append('nombre', document.querySelector('input[name="nombre"]').value);
+            Datos.append('precio', document.querySelector('input[name="precio"]').value);
+            Datos.append('fecha', document.querySelector('input[name="fecha"]').value + 'T00:00:00');
+            if (idLibroEditar !== null) {
+                let urlWebAPILibrosID = urlWebAPILibros + `/${idLibroEditar}`;
+                Datos.append('id', idLibroEditar);
+                let respuestaPut = await fetch(urlWebAPILibrosID, {
+                    method: 'PUT',
+                    body: Datos
+                });
+                if (respuestaPut.ok) {
+                    alert('Producto modificado exitosamente');
+                    window.location.href = "index.html";
+                }
+            } else {
+                let respuestaPost = await fetch(urlWebAPILibros, {
+                    method: 'POST',
+                    body: Datos
+                });
+                if (respuestaPost.ok) {
+                    alert('Producto guardado exitosamente');
+                    window.location.href = "index.html";
+                }
+            }
+        }
+
+        async function consumirWebAPIGETCategoria() {
+            try {
+                let respuestaGETCategorias = await fetchGetData(urlWebAPICategorias);
+                let jsonGET = await respuestaGETCategorias.json();
+                let selectCategoria = document.querySelector('select[name="categoria"]');
+                jsonGET.forEach(categoria => {
+                    let option = document.createElement('option');
+                    option.value = categoria.id;
+                    option.textContent = categoria.nombre;
+                    selectCategoria.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Error al obtener las categorías:', error);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            insertarFooter();
+            insertarNavBar();
+            consumirWebAPIGETCategoria();
+        });
+    </script>
+</body>
+</html>
