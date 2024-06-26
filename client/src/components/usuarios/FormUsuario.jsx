@@ -1,88 +1,147 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { CreateUser } from '../../api/usuarios.api';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { getComunas } from '../../api/comunas.api';
+import { useForm } from 'react-hook-form';
+import { Container, Form, Button, Row, Col } from 'react-bootstrap';
+export const FormUsuario = () => {
 
-const RegistrarUsuario = () => {
-  const [formData, setFormData] = useState({
-    correo: '',
-    rut: '',
-    primer_nombre: '',
-    segundo_nombre: '',
-    apellido_paterno: '',
-    apellido_materno: '',
-    contrasena: '',
-    numero_telefono: '',
-    comuna: ''
-  });
+  const { register, handleSubmit, formState: { errors } } = useForm();
+  const [comunas, setComunas] = useState([]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+  useEffect(()=>{
+    ComunasList();
+  },[]);
+
+  async function ComunasList() {
+    const data = await getComunas();
+    setComunas(data);
+  }
+
+  const onSubmit = async (formData) => {
+    try {
+      let json = JSON.stringify(formData)
+      let respuestaPost  = await CreateUser(json);
+      if (respuestaPost && respuestaPost.status == 201) {
+        alert('Usuario registrado exitosamente');
+      } else {
+        alert('Error al registrar el usuario');
+      }
+    } catch (error) {
+      alert('Error al registrar el usuario:' + error.respuestaPost.data);
+    }  
+   
   };
 
-  const consumirWebAPIFORM = async (e) => {
-    e.preventDefault();
-    let respuestaPost  = await CreateUser(JSON.stringify(formData));
-    if (respuestaPost.ok) {
-      alert('Usuario registrado exitosamente');
-      window.location.href = "inicio-sesion.html";
-    } else {
-      let errorMessage = await respuestaPost.text();
-      alert('Error al registrar el usuario: ' + errorMessage);
-    }
-  };
 
 
   return (
-    <div className="main-content">
-      <h2>Registrar Usuario</h2>
-      <br />
-      <div className="RegistrarUsuario-container">
-        <form id="FormularioRegistrarUsuario" onSubmit={consumirWebAPIFORM}>
-          <div className="form-group">
-            <label htmlFor="correo">Correo</label>
-            <input type="email" className="form-control" name="correo" id="correo" required onChange={handleChange} value={formData.correo} />
-          </div>
-          <div className="form-group">
-            <label htmlFor="rut">R.U.T</label>
-            <input type="text" className="form-control" name="rut" id="rut" required onChange={handleChange} value={formData.rut} />
-          </div>
-          <div className="form-group">
-            <label htmlFor="primer_nombre">Primer Nombre</label>
-            <input type="text" className="form-control" name="primer_nombre" id="primer_nombre" required onChange={handleChange} value={formData.primer_nombre} />
-          </div>
-          <div className="form-group">
-            <label htmlFor="segundo_nombre">Segundo Nombre</label>
-            <input type="text" className="form-control" name="segundo_nombre" id="segundo_nombre" onChange={handleChange} value={formData.segundo_nombre} />
-          </div>
-          <div className="form-group">
-            <label htmlFor="apellido_paterno">Apellido Paterno</label>
-            <input type="text" className="form-control" name="apellido_paterno" id="apellido_paterno" required onChange={handleChange} value={formData.apellido_paterno} />
-          </div>
-          <div className="form-group">
-            <label htmlFor="apellido_materno">Apellido Materno</label>
-            <input type="text" className="form-control" name="apellido_materno" id="apellido_materno" required onChange={handleChange} value={formData.apellido_materno} />
-          </div>
-          <div className="form-group">
-            <label htmlFor="contrasena">Contraseña:</label>
-            <input type="password" className="form-control" name="contrasena" id="contrasena" required onChange={handleChange} value={formData.contrasena} />
-          </div>
-          <div className="form-group">
-            <label htmlFor="numero_telefono">Número de teléfono</label>
-            <input type="tel" className="form-control" name="numero_telefono" id="numero_telefono" required onChange={handleChange} value={formData.numero_telefono} />
-          </div>
-          <div className="form-group">
-            <label htmlFor="comuna">Comuna</label>
-            <select className="form-control" name="comuna" id="comuna" required onChange={handleChange} value={formData.comuna}>
+    <Container className="main-content">
+    <h2>Registrar Usuario</h2>
+    <br />
+    <Row className="justify-content-md-center">
+      <Col>
+        <Form id="FormularioRegistrarUsuario" onSubmit={handleSubmit(onSubmit)}>
+          <Form.Group controlId="correo">
+            <Form.Label>Correo</Form.Label>
+            <Form.Control
+              type="email"
+              {...register('correo', { required: true })}
+              isInvalid={!!errors.correo}
+            />
+            <Form.Control.Feedback type="invalid">Correo es requerido</Form.Control.Feedback>
+          </Form.Group>
+
+          <Form.Group controlId="rut">
+            <Form.Label>R.U.T</Form.Label>
+            <Form.Control
+              type="text"
+              {...register('rut', { required: true })}
+              isInvalid={!!errors.rut}
+            />
+            <Form.Control.Feedback type="invalid">R.U.T es requerido</Form.Control.Feedback>
+          </Form.Group>
+
+          <Form.Group controlId="primer_nombre">
+            <Form.Label>Primer Nombre</Form.Label>
+            <Form.Control
+              type="text"
+              {...register('primer_nombre', { required: true })}
+              isInvalid={!!errors.primer_nombre}
+            />
+            <Form.Control.Feedback type="invalid">Primer Nombre es requerido</Form.Control.Feedback>
+          </Form.Group>
+
+          <Form.Group controlId="segundo_nombre">
+            <Form.Label>Segundo Nombre</Form.Label>
+            <Form.Control
+              type="text"
+              {...register('segundo_nombre')}
+            />
+          </Form.Group>
+
+          <Form.Group controlId="apellido_paterno">
+            <Form.Label>Apellido Paterno</Form.Label>
+            <Form.Control
+              type="text"
+              {...register('apellido_paterno', { required: true })}
+              isInvalid={!!errors.apellido_paterno}
+            />
+            <Form.Control.Feedback type="invalid">Apellido Paterno es requerido</Form.Control.Feedback>
+          </Form.Group>
+
+          <Form.Group controlId="apellido_materno">
+            <Form.Label>Apellido Materno</Form.Label>
+            <Form.Control
+              type="text"
+              {...register('apellido_materno', { required: true })}
+              isInvalid={!!errors.apellido_materno}
+            />
+            <Form.Control.Feedback type="invalid">Apellido Materno es requerido</Form.Control.Feedback>
+          </Form.Group>
+
+          <Form.Group controlId="contrasena">
+            <Form.Label>Contraseña</Form.Label>
+            <Form.Control
+              type="password"
+              {...register('contrasena', { required: true })}
+              isInvalid={!!errors.contrasena}
+            />
+            <Form.Control.Feedback type="invalid">Contraseña es requerido</Form.Control.Feedback>
+          </Form.Group>
+
+          <Form.Group controlId="numero_telefono">
+            <Form.Label>Número de teléfono</Form.Label>
+            <Form.Control
+              type="tel"
+              {...register('numero_telefono', { required: true })}
+              isInvalid={!!errors.numero_telefono}
+            />
+            <Form.Control.Feedback type="invalid">Número de teléfono es requerido</Form.Control.Feedback>
+          </Form.Group>
+
+          <Form.Group controlId="comuna">
+            <Form.Label>Comuna</Form.Label>
+            <Form.Control
+              as="select"
+              {...register('comuna', { required: true })}
+              isInvalid={!!errors.comuna}
+            >
               <option value="">Seleccione una comuna</option>
-              <option value="1">Maipu</option>
-            </select>
-          </div>
+              {comunas.map( (comu) => {
+                return(
+                <option value={comu.id} key={comu.id}>
+                  {comu.nombre}
+                </option>
+              );
+              })}
+            </Form.Control>
+            <Form.Control.Feedback type="invalid">Comuna es requerida</Form.Control.Feedback>
+          </Form.Group>
           <br />
-          <button type="submit" className="btn btn-primary btn-block">Guardar</button>
-        </form>
-      </div>
-      <br />
-    </div>
-  );
-};
+          <Button type="submit" className="btn btn-primary btn-block">Guardar</Button>
+        </Form>
+      </Col>
+    </Row>
+    <br />
+  </Container>
+  )};

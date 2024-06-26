@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS Ventas_Libros;
+DROP TABLE IF EXISTS Ventas;
 DROP TABLE IF EXISTS Libros;
 DROP TABLE IF EXISTS Usuarios;
 DROP TABLE IF EXISTS Sucursales;
@@ -5,6 +7,7 @@ DROP TABLE IF EXISTS Comunas;
 DROP TABLE IF EXISTS Regiones;
 DROP TABLE IF EXISTS Categorias;
 DROP TABLE IF EXISTS TipoUsuarios;
+
 ------------------------CREACION DE TABLAS---------------------------------------
 CREATE TABLE TipoUsuarios (
     id INT PRIMARY KEY IDENTITY,
@@ -63,6 +66,23 @@ CREATE TABLE Libros (
     CONSTRAINT FK_Libros_Categorias FOREIGN KEY (categoria) REFERENCES Categorias(id),
     CONSTRAINT FK_Libros_Sucursales FOREIGN KEY (sucursal) REFERENCES Sucursales(id)
 );
+
+CREATE TABLE Ventas (
+    id INT PRIMARY KEY IDENTITY,
+    saldo NUMERIC (12,0) NOT NULL,
+    fecha DATETIME NOT NULL,
+    rut_usuario INT NOT NULL,
+    CONSTRAINT FK_Ventas_Usuarios FOREIGN KEY (rut_usuario) REFERENCES Usuarios(rut),
+);
+
+CREATE TABLE Ventas_Libros(
+    id_ventas INT NOT NULL,
+    id_libros INT NOT NULL,
+    cantidad INT NOT NULL,
+    CONSTRAINT FK_Ventas_Libros_Ventas FOREIGN KEY (id_ventas) REFERENCES Ventas(id),
+    CONSTRAINT FK_Ventas_Libros_Libros FOREIGN KEY (id_libros) REFERENCES Libros(id)
+);
+
 ---POBLADO DE LA BASE DE DATOS
 INSERT INTO Regiones (nombre) VALUES ('Region Metropolitana');
 INSERT INTO Comunas (nombre, region) VALUES ('Maipu',1);
@@ -71,6 +91,7 @@ INSERT INTO Sucursales (nombre, comuna) VALUES ('Sucursal Central',1);
 INSERT INTO TipoUsuarios (nombre) VALUES ('ADMIN');
 INSERT INTO TipoUsuarios (nombre) VALUES ('CLIENTE');
 ---EJEMPLO DE JSON USUARIOS
+/*
 {
     "rut"              : "19.960.758-8",
     "primer_nombre"    : "Julian",
@@ -82,3 +103,4 @@ INSERT INTO TipoUsuarios (nombre) VALUES ('CLIENTE');
     "numero_telefono"  : "+56972605993",
     "comuna"           : 1
 }
+*/

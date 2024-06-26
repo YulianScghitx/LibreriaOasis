@@ -3,6 +3,7 @@ using LibreriaOasis.DTOs;
 using LibreriaOasis.Modelos;
 using LibreriaOasis.Repositorios.Interfaces;
 using Microsoft.AspNetCore.Http.HttpResults;
+using System.Collections;
 using BCrypt.Net;
 
 namespace LibreriaOasis.Rutas
