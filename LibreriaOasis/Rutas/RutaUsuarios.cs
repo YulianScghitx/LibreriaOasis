@@ -3,7 +3,9 @@ using LibreriaOasis.DTOs;
 using LibreriaOasis.Modelos;
 using LibreriaOasis.Repositorios.Interfaces;
 using Microsoft.AspNetCore.Http.HttpResults;
+using System.Collections;
 using BCrypt.Net;
+using Microsoft.AspNetCore.Mvc;
 
 namespace LibreriaOasis.Rutas
 {
@@ -50,12 +52,20 @@ namespace LibreriaOasis.Rutas
             await repositorio.Desactivar(rut);
            return TypedResults.NoContent();
         }
-        static async Task<Results<Ok, UnauthorizedHttpResult>> VerificarContrasena(LoginDTO verificarContrasenaDTO, IRepositorioUsuarios repositorio)
+        static async Task<Results<Ok<LoginDTO>, UnauthorizedHttpResult>> VerificarContrasena([FromBody]LoginDTO verificarContrasenaDTO, IRepositorioUsuarios repositorio)
         {
-            var esValido = await repositorio.VerificarContrasena(verificarContrasenaDTO.rut, verificarContrasenaDTO.contrasena);
+            var esValido = await repositorio.VerificarContrasena(verificarContrasenaDTO.correo, verificarContrasenaDTO.contrasena);
             if (esValido)
             {
-                return TypedResults.Ok();
+                Usuarios user = await repositorio.ObtenerPorCorreo(verificarContrasenaDTO.correo);
+                LoginDTO sal = new LoginDTO()
+                {
+                    correo = user.correo,
+                    contrasena = user.contrasena,
+                    tipo_usuario = user.tipo_usuario,
+                };
+
+                return TypedResults.Ok(sal);
             }
             else
             {

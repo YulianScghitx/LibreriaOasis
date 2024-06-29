@@ -2,7 +2,8 @@
 {
     public class LoginDTO
     {
-        public string rut { get; set; } = null!;
+        public string correo { get; set; } = null!;
         public string contrasena { get; set; } = null!;
+        public int tipo_usuario { get; set; }
     }
 }

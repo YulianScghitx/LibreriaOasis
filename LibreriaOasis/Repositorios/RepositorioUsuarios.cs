@@ -1,6 +1,7 @@
 ﻿using LibreriaOasis.Modelos;
 using LibreriaOasis.Repositorios.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace LibreriaOasis.Repositorios
 {
@@ -34,15 +35,20 @@ namespace LibreriaOasis.Repositorios
                 await contexto.SaveChangesAsync();
             }
         }
-        public async Task<bool> VerificarContrasena(string rut, string contrasenaIngresada)
+        public async Task<bool> VerificarContrasena(string correo, string contrasenaIngresada)
         {
-            var usuario = await contexto.Usuarios.FirstOrDefaultAsync(x => x.rut == rut);
+            var usuario = await contexto.Usuarios.FirstOrDefaultAsync(x => x.correo == correo);
             if (usuario == null)
             {
                 return false;
             }
 
             return BCrypt.Net.BCrypt.Verify(contrasenaIngresada, usuario.contrasena);
+        }
+
+        public async Task<Usuarios> ObtenerPorCorreo(string correo)
+        {
+            return await contexto.Usuarios.FirstOrDefaultAsync(x => x.correo == correo);
         }
     }
 }

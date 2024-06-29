@@ -52,7 +52,12 @@
     <script type="text/javascript" src="js/funciones.js"></script>
     <script type="text/javascript">
 
-        var urlWebAPIUsuarios = 'https://localhost:7025/usuarios';
+        var urlWebAPIUsuarios = 'https://localhost:60096/usuarios';
+        var tipo_usuario = localStorage.getItem('tipo_usuario');
+        if (tipo_usuario === null || tipo_usuario !== '1') {
+            alert("Usuario no permitido");
+            window.location.href = "index.html";
+        }
 
         async function consumirWebAPI() {
             let respuestaGETUsuarios = await fetchGetData(urlWebAPIUsuarios);
@@ -92,6 +97,7 @@
             consumirWebAPI();
             insertarFooter();
             insertarNavBar();
+            autenticacion();
         });
     </script>
 </body>

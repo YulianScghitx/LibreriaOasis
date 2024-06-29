@@ -50,14 +50,14 @@
                 <form id="loginForm"> 
                     <div class="form-group">
                         <label for="email">Email:</label> 
-                        <input type="email" class="form-control" name="email" id="email" required>
+                        <input type="email" class="form-control" name="correo" id="correo" required>
                     </div>
                     <div class="form-group">
                         <label for="contraseña">Contraseña:</label> 
-                        <input type="password" class="form-control" name="contraseña" id="contraseña" required>
+                        <input type="password" class="form-control" name="contrasena" id="contrasena" required>
                     </div>
                     <br>
-                    <button type="button" class="btn btn-primary btn-block">Login</button>
+                    <button type="submit" class="btn btn-primary btn-block">Login</button>
                     <a style="margin-left: 10.6rem;" href="registrar-usuario.html">Registrar Usuario</a>
                 </form>
             </div>
@@ -66,9 +66,49 @@
     </div>
     <script type="text/javascript" src="js/funciones.js"></script>
     <script type="text/javascript">
+        
+        var urlWebAPIUsuarios = 'https://localhost:60096/usuarios';
+        if (localStorage.getItem('sesionIniciada') !== null) {
+            window.location.href = "index.html";
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', async function (event) {
+            event.preventDefault();
+            const formData = new FormData(this);
+            const data = {};
+            formData.forEach((value, key) => {
+                data[key] = value;
+            });
+            try {
+                let urlWebAPIUsuariosVerificar = urlWebAPIUsuarios + `/verificar`;
+                const resp = await fetchPostData(urlWebAPIUsuariosVerificar,data);
+            if (resp.ok) {
+                const result = await resp.json();
+                console.log('Success:', result);
+                localStorage.setItem("correo", result.correo);
+                localStorage.setItem("contrasena", result.contrasena);
+                localStorage.setItem("tipo_usuario", result.tipo_usuario);
+                localStorage.setItem('sesionIniciada', 'true');
+                window.location.href = "index.html";
+            } 
+            else if (resp.status == 401) {
+                alert('Credenciales incorrectas');
+            }
+            else {
+                const error = await resp.json();
+                console.error('Error:', error);
+                alert('Error submitting form');
+            }
+            } catch (error) {
+                console.error('Request failed:', error);
+                alert('Request failed');
+            }
+        });
+
         document.addEventListener('DOMContentLoaded', () => {
             insertarFooter();
             insertarNavBar();
+            autenticacion();
         });
     </script>
 </body>

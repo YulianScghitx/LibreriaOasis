@@ -96,10 +96,15 @@
     </div>
     <script type="text/javascript" src="js/funciones.js"></script>
     <script type="text/javascript">
-        var urlWebAPICategorias = 'https://localhost:7025/categorias';
-        var urlWebAPILibros     = 'https://localhost:7025/libros';
+        var urlWebAPICategorias = 'https://localhost:60096/categorias';
+        var urlWebAPILibros     = 'https://localhost:60096/libros';
         var urlParams = new URLSearchParams(window.location.search);
         var idLibroEditar = urlParams.get('id');
+        var tipo_usuario = localStorage.getItem('tipo_usuario');
+        if (tipo_usuario === null || tipo_usuario !== '1') {
+            alert("Usuario no permitido");
+            window.location.href = "index.html";
+        }
 
         if (idLibroEditar !== null) {
             consumirWebAPIGETLibro();
@@ -172,6 +177,7 @@
             insertarFooter();
             insertarNavBar();
             consumirWebAPIGETCategoria();
+            autenticacion();
         });
     </script>
 </body>

@@ -23,25 +23,30 @@ function insertarNavBar() {
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                  <a class="nav-link active" aria-current="page" href="inicio-sesion.html">Inicio sesión</a>
+                  <a id="login" class="nav-link active" aria-current="page" href="inicio-sesion.html">Inicio sesión</a>
+                </li>
+                <li class="nav-item">
+                  <a id="logout" class="nav-link active" style="display:none;" aria-current="page" onclick="logout()" href="index.html">Cerrar sesión</a>
                 </li>
                 <li class="nav-item ">
-                  <a class="nav-link active" href="listar-usuario.html">Listar Usuario</a>
+                  <a id="listarUsuario" class="nav-link active" style="display:none;" href="listar-usuario.html">Listar Usuario</a>
                 </li>
                 <li class="nav-item dropdown">
-                  <a class="nav-link active dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Libros
-                  </a>
-                  <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <li><a class="dropdown-item" href="listar-libro.html">Listar Libros</a></li>
-                    <li><a class="dropdown-item" href="listar-categoria.html">Listar Categorias</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="crear-libro.html">Crear Libros</a></li>
-                    <li><a class="dropdown-item" href="crear-categoria.html">Crear Categorias</a></li>
-                  </ul>
+                    <div style="display:none;" id="libros">
+                        <a class="nav-link active dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Libros
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="listar-libro.html">Listar Libros</a></li>
+                            <li><a class="dropdown-item" href="listar-categoria.html">Listar Categorias</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="crear-libro.html">Crear Libros</a></li>
+                            <li><a class="dropdown-item" href="crear-categoria.html">Crear Categorias</a></li>
+                        </ul>
+                    </div>
                 </li>
               </ul>
-              <div class="d-flex">
+              <div id="carritoIcono" style="display:none;">
                 <button type="button" class="btn btn-outline-danger" onclick="window.location.href='carrito.html'">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart-check" viewBox="0 0 16 16">
                     <path d="M11.354 6.354a.5.5 0 0 0-.708-.708L8 8.293 6.854 7.146a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0z"></path>
@@ -118,5 +123,29 @@ async function fetchPutData(urlWebAPI, jsonData) {
     } catch (error) {
         console.error('Error:', error);
         throw error;
+    }
+}
+
+function logout() {
+    localStorage.clear();
+    document.getElementById('login').style.display = 'block';
+    document.getElementById('logout').style.display = 'none';
+}
+
+function autenticacion(){
+    if (localStorage.getItem('sesionIniciada')) {
+        debugger;
+        document.getElementById('login').style.display = 'none';
+        document.getElementById('logout').style.display = 'block';
+        if(localStorage.getItem('tipo_usuario') == 1){
+            document.getElementById('listarUsuario').style.display = 'block';
+            document.getElementById('libros').style.display = 'block';
+        }
+        if(localStorage.getItem('tipo_usuario') == 2){
+            document.getElementById('carritoIcono').style.display = 'flex';
+        }
+    } else {
+        document.getElementById('login').style.display = 'block';
+        document.getElementById('logout').style.display = 'none';
     }
 }
