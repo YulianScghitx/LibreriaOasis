@@ -50,14 +50,14 @@
                 <form id="loginForm"> 
                     <div class="form-group">
                         <label for="email">Email:</label> 
-                        <input type="email" class="form-control" name="email" id="email" required>
+                        <input type="email" class="form-control" name="correo" id="correo" required>
                     </div>
                     <div class="form-group">
                         <label for="contraseña">Contraseña:</label> 
-                        <input type="password" class="form-control" name="contraseña" id="contraseña" required>
+                        <input type="password" class="form-control" name="contrasena" id="contrasena" required>
                     </div>
                     <br>
-                    <button type="button" class="btn btn-primary btn-block">Login</button>
+                    <button type="submit" class="btn btn-primary btn-block">Login</button>
                     <a style="margin-left: 10.6rem;" href="registrar-usuario.html">Registrar Usuario</a>
                 </form>
             </div>
@@ -70,6 +70,44 @@
             insertarFooter();
             insertarNavBar();
         });
+        document.getElementById('loginForm').addEventListener('submit', async function (event) {
+            event.preventDefault();
+            const formData = new FormData(this);
+            const data = {};
+            formData.forEach((value, key) => {
+                data[key] = value;
+            });
+
+            try {
+                const resp = await fetch('https://localhost:7025/usuarios/verificar', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+            });
+            if (resp.ok) {
+                const result = await resp.json();
+                console.log('Success:', result);
+                localStorage.setItem("correo", result.correo);
+                localStorage.setItem("contrasena", result.contrasena);
+                localStorage.setItem("tipo_usuario", result.tipo_usuario);
+                window.location.href("index.html")
+            } 
+            else if (resp.status == 401) {
+                alert('Credenciales incorrectas');
+            }
+            else {
+                const error = await resp.json();
+                console.error('Error:', error);
+                alert('Error submitting form');
+            }
+            } catch (error) {
+                console.error('Request failed:', error);
+                alert('Request failed');
+            }
+        });
+
     </script>
 </body>
 </html>
