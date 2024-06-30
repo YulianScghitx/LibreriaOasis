@@ -4,6 +4,6 @@
     {
         public string correo { get; set; } = null!;
         public string contrasena { get; set; } = null!;
-        public int tipo_usuario { get; set; }
+        public string tipo_usuario { get; set; } = null!;
     }
 }

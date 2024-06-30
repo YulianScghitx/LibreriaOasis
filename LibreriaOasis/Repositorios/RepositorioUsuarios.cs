@@ -43,7 +43,8 @@ namespace LibreriaOasis.Repositorios
                 return false;
             }
 
-            return BCrypt.Net.BCrypt.Verify(contrasenaIngresada, usuario.contrasena);
+            //return BCrypt.Net.BCrypt.Verify(contrasenaIngresada, usuario.contrasena);
+            return contrasenaIngresada.Equals(usuario.contrasena);
         }
 
         public async Task<Usuarios> ObtenerPorCorreo(string correo)

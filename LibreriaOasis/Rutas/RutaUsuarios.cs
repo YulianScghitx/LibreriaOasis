@@ -6,6 +6,14 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using System.Collections;
 using BCrypt.Net;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using System.Text.Json.Serialization;
+using Newtonsoft.Json;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LibreriaOasis.Rutas
 {
@@ -17,7 +25,7 @@ namespace LibreriaOasis.Rutas
             grupo.MapGet("/{rut}", ObtenerUsuariosPorRut);
             grupo.MapPost("", CrearUsuarios);
             grupo.MapDelete("/{rut}", DesactivarUsuarios);
-            grupo.MapPost("/verificar", VerificarContrasena);
+            grupo.MapPost("/Autorisa", Autorisa);
             return grupo;
         }
         static async Task<Ok<List<UsuariosSalidaDTO>>> ObtenerUsuarios(IRepositorioUsuarios repositorio, IMapper mapper)
@@ -42,6 +50,7 @@ namespace LibreriaOasis.Rutas
             var usuariosDTO = mapper.Map<UsuariosSalidaDTO>(usuarios);
             return TypedResults.Created($"/", usuariosDTO);
         }
+        [Authorize]
         static async Task<Results<NoContent, NotFound>> DesactivarUsuarios(string rut, IRepositorioUsuarios repositorio)
         {
             var usuariosDB = await repositorio.ObtenerPorRut(rut);
@@ -54,7 +63,7 @@ namespace LibreriaOasis.Rutas
         }
         static async Task<Results<Ok<LoginDTO>, UnauthorizedHttpResult>> VerificarContrasena([FromBody]LoginDTO verificarContrasenaDTO, IRepositorioUsuarios repositorio)
         {
-            var esValido = await repositorio.VerificarContrasena(verificarContrasenaDTO.correo, verificarContrasenaDTO.contrasena);
+            bool esValido = await repositorio.VerificarContrasena(verificarContrasenaDTO.correo, verificarContrasenaDTO.contrasena);
             if (esValido)
             {
 
@@ -64,7 +73,7 @@ namespace LibreriaOasis.Rutas
                 {
                     correo = user.correo,
                     contrasena = user.contrasena,
-                    tipo_usuario = user.tipo_usuario,
+                    tipo_usuario = user.tipo_usuario.ToString(),
                 };
 
                 return TypedResults.Ok(sal);
@@ -74,5 +83,35 @@ namespace LibreriaOasis.Rutas
                 return TypedResults.Unauthorized();
             }
         }
+
+        static async Task<IResult> Autorisa([FromBody] LoginDTO user, IConfiguration config, IRepositorioUsuarios repositorio) 
+        {
+            bool esValido = await repositorio.VerificarContrasena(user.correo, user.contrasena);
+            if (esValido)
+            {
+                JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+                byte[] key = Encoding.UTF8.GetBytes(config["Jwt:Key"]);
+                SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
+                {
+                    Subject = new ClaimsIdentity(new[]
+                    {
+                new Claim("correo", user.correo),
+                new Claim("tipo_usuario", user.tipo_usuario.ToString())
+            }),
+                    Expires = DateTime.UtcNow.AddHours(1),
+                    Issuer = config["Jwt:Issuer"],
+                    Audience = config["Jwt:Audience"],
+                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                };
+
+                SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
+                string tokenString = tokenHandler.WriteToken(token);
+
+                return Results.Ok(new { token = tokenString });
+            }
+            return Results.Unauthorized();
+
+        }
+
     }
 }
